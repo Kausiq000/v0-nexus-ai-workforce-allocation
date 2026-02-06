@@ -8,12 +8,12 @@ const _geist = Geist({ subsets: ['latin'] })
 const _geistMono = Geist_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Nexus - AI Workforce Allocation System',
-  description: 'Enterprise-grade AI-powered workforce allocation for smart factories. Real-time monitoring, predictive analytics, and intelligent resource management.',
+  title: 'ALLOC8: AUTOMATE - Smart Factory Workforce System',
+  description: 'Next-generation AI-powered workforce allocation for smart factories. Digital twin visualization, predictive scheduling, and autonomous resource orchestration.',
 }
 
 export const viewport: Viewport = {
-  themeColor: '#06b6d4',
+  themeColor: '#22d3ee',
 }
 
 export default function RootLayout({
