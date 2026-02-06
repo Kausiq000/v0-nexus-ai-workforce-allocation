@@ -20,26 +20,27 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.2,
+        staggerChildren: 0.15,
+        delayChildren: 0.3,
       },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.8, ease: "easeOut" },
+      transition: { duration: 1, ease: "easeOut" },
     },
   }
 
   return (
     <motion.div
-      initial={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
       className="fixed inset-0 z-50 overflow-hidden"
     >
       {/* Video Background - Bright & Visible */}
@@ -64,51 +65,87 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
         className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6 lg:px-8"
       >
         {/* Badge */}
-        <motion.div variants={itemVariants} className="mb-6 sm:mb-8">
+        <motion.div variants={itemVariants} className="mb-8 sm:mb-12">
           <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-black/30 px-4 py-2 backdrop-blur-md">
             <div className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
             <span className="text-xs font-medium tracking-wider text-cyan-300">
-              Smart Factory Orchestration
+              Enterprise Workforce System
             </span>
           </div>
         </motion.div>
 
-        {/* Main Title - ALLOC8OR with Cyberpunk Neon Glow */}
-        <motion.div variants={itemVariants} className="mb-6 sm:mb-10 text-center">
+        {/* Main Title - ALLOC8OR with Asimovian Font & Selective Neon Blue */}
+        <motion.div variants={itemVariants} className="mb-8 sm:mb-12 text-center">
           <div className="relative">
             {/* Neon Glow Background Effect */}
             <div className="absolute -inset-6 sm:-inset-8 blur-3xl opacity-60">
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/50 via-blue-500/50 to-cyan-500/50 animate-pulse" />
             </div>
 
-            {/* Title with Cyberpunk Neon Text Shadow */}
-            <h1
-              className="font-display text-6xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-none relative"
-              style={{
-                color: "#FFFFFF",
-                textShadow: `
-                  0 0 8px rgba(34, 211, 238, 0.8),
-                  0 0 16px rgba(34, 211, 238, 0.6),
-                  0 0 24px rgba(34, 211, 238, 0.5),
-                  0 0 32px rgba(59, 130, 246, 0.6),
-                  0 0 40px rgba(59, 130, 246, 0.4),
-                  0 0 48px rgba(139, 92, 246, 0.3),
-                  2px 2px 0 rgba(34, 211, 238, 0.4),
-                  -2px -2px 0 rgba(59, 130, 246, 0.4),
-                  4px 4px 0 rgba(34, 211, 238, 0.2)
-                `,
-                letterSpacing: "-0.03em",
-              }}
-            >
-              ALLOC8OR
-            </h1>
+            {/* Title with Asimovian Font - ALLOC + 8O (neon blue) + R */}
+            <div className="relative flex items-center justify-center gap-0">
+              {/* ALLOC in white */}
+              <h1
+                className="font-display text-6xl sm:text-7xl lg:text-8xl font-black leading-none"
+                style={{
+                  color: "#FFFFFF",
+                  textShadow: `
+                    0 0 8px rgba(34, 211, 238, 0.6),
+                    0 0 16px rgba(34, 211, 238, 0.4),
+                    2px 2px 0 rgba(34, 211, 238, 0.3),
+                    -2px -2px 0 rgba(59, 130, 246, 0.3)
+                  `,
+                  letterSpacing: "0.05em",
+                }}
+              >
+                ALLOC
+              </h1>
+
+              {/* 8O in neon blue */}
+              <h1
+                className="font-display text-6xl sm:text-7xl lg:text-8xl font-black leading-none"
+                style={{
+                  color: "#22D3EE",
+                  textShadow: `
+                    0 0 10px rgba(34, 211, 238, 1),
+                    0 0 20px rgba(34, 211, 238, 0.8),
+                    0 0 30px rgba(34, 211, 238, 0.6),
+                    0 0 40px rgba(59, 130, 246, 0.8),
+                    0 0 50px rgba(59, 130, 246, 0.6),
+                    2px 2px 0 rgba(34, 211, 238, 0.6),
+                    -2px -2px 0 rgba(59, 130, 246, 0.6),
+                    4px 4px 0 rgba(34, 211, 238, 0.4)
+                  `,
+                  letterSpacing: "0.05em",
+                }}
+              >
+                8O
+              </h1>
+
+              {/* R in white */}
+              <h1
+                className="font-display text-6xl sm:text-7xl lg:text-8xl font-black leading-none"
+                style={{
+                  color: "#FFFFFF",
+                  textShadow: `
+                    0 0 8px rgba(34, 211, 238, 0.6),
+                    0 0 16px rgba(34, 211, 238, 0.4),
+                    2px 2px 0 rgba(34, 211, 238, 0.3),
+                    -2px -2px 0 rgba(59, 130, 246, 0.3)
+                  `,
+                  letterSpacing: "0.05em",
+                }}
+              >
+                R
+              </h1>
+            </div>
 
             {/* Animated Neon Line */}
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              transition={{ delay: 0.7, duration: 0.8, ease: "easeOut" }}
-              className="mt-4 sm:mt-6 mx-auto h-1 w-40 sm:w-48 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500"
+              transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
+              className="mt-6 sm:mt-8 mx-auto h-1.5 w-40 sm:w-48 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500"
               style={{
                 originX: 0.5,
                 boxShadow: "0 0 20px rgba(34, 211, 238, 0.6), 0 0 10px rgba(59, 130, 246, 0.4)",
@@ -117,10 +154,10 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
           </div>
         </motion.div>
 
-        {/* Tagline */}
+        {/* Tagline - Single Instance */}
         <motion.p
           variants={itemVariants}
-          className="mb-8 sm:mb-10 max-w-2xl text-center text-base sm:text-lg text-cyan-100 leading-relaxed font-light tracking-wide"
+          className="mb-6 sm:mb-8 max-w-2xl text-center text-lg sm:text-xl text-cyan-100 leading-relaxed font-light tracking-widest"
         >
           Smart Factory Orchestration
         </motion.p>
@@ -128,7 +165,7 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
         {/* Description */}
         <motion.p
           variants={itemVariants}
-          className="mb-10 sm:mb-12 max-w-2xl text-center text-xs sm:text-sm text-white/60 leading-relaxed"
+          className="mb-12 sm:mb-16 max-w-2xl text-center text-sm sm:text-base text-white/70 leading-relaxed"
         >
           AI-powered workforce allocation for smart factories. Real-time scheduling, predictive analytics, and autonomous resource orchestration.
         </motion.p>
