@@ -1,254 +1,177 @@
 "use client"
 
-import React, { useState } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
-import { CheckCircle2, Calendar, BarChart3, LogOut, Menu } from "lucide-react"
+import { Clock, CheckCircle2, TrendingUp, LogOut } from "lucide-react"
 
 interface WorkerDashboardProps {
   onLogout: () => void
 }
 
 export function WorkerDashboard({ onLogout }: WorkerDashboardProps) {
-  const [activeView, setActiveView] = useState<"tasks" | "attendance" | "stats">("tasks")
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  const navItems = [
-    { id: "tasks", label: "My Tasks", icon: CheckCircle2 },
-    { id: "attendance", label: "Attendance", icon: Calendar },
-    { id: "stats", label: "My Stats", icon: BarChart3 },
-  ]
+  const [activeTab, setActiveTab] = useState<"tasks" | "attendance" | "stats">("tasks")
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
+      transition: { staggerChildren: 0.05, delayChildren: 0.1 },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
   }
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen flex flex-col md:flex-row"
-      style={{ background: "#F4F7FA" }}
+      className="min-h-screen bg-background"
     >
-      {/* Mobile menu button */}
-      <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="md:hidden fixed top-4 left-4 z-40 p-2 rounded-lg bg-white border border-border/50 hover:bg-secondary/5 transition-colors"
-        aria-label="Toggle menu"
-      >
-        <Menu className="h-5 w-5 text-foreground" />
-      </button>
-
-      {/* Sidebar */}
-      <motion.aside
-        initial={{ x: -300 }}
-        animate={{ x: sidebarOpen ? 0 : -300 }}
-        transition={{ duration: 0.3 }}
-        className="fixed md:static inset-y-0 left-0 w-64 bg-white border-r border-border/50 z-30 md:translate-x-0"
-      >
-        {/* Logo */}
-        <div className="p-6 border-b border-border/50">
-          <h2 className="font-heading text-2xl font-bold text-primary">ALLOC8</h2>
-          <p className="font-sans text-xs text-muted-foreground mt-1">Worker Portal</p>
+      {/* Header */}
+      <header className="sticky top-0 z-40 border-b border-border bg-white/50 backdrop-blur-md">
+        <div className="flex items-center justify-between px-6 py-4 sm:px-8">
+          <div>
+            <h1 className="font-heading text-2xl font-bold text-foreground">My Dashboard</h1>
+            <p className="text-sm text-muted-foreground">Welcome back, Worker</p>
+          </div>
+          <button
+            onClick={onLogout}
+            className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-all hover:bg-white/10 active:scale-95"
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="hidden sm:inline">Logout</span>
+          </button>
         </div>
+      </header>
 
-        {/* Navigation */}
-        <nav className="p-4 space-y-2">
-          {navItems.map((item) => {
-            const Icon = item.icon
+      {/* Main Content */}
+      <main className="p-6 sm:p-8">
+        {/* Tab Navigation */}
+        <div className="mb-8 flex gap-2 border-b border-border">
+          {[
+            { id: "tasks" as const, label: "My Tasks", icon: CheckCircle2 },
+            { id: "attendance" as const, label: "Attendance", icon: Clock },
+            { id: "stats" as const, label: "Performance", icon: TrendingUp },
+          ].map((tab) => {
+            const Icon = tab.icon
             return (
               <button
-                key={item.id}
-                onClick={() => {
-                  setActiveView(item.id as "tasks" | "attendance" | "stats")
-                  setSidebarOpen(false)
-                }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-sans text-sm transition-all ${
-                  activeView === item.id
-                    ? "bg-primary/10 text-primary font-semibold border-l-2 border-primary"
-                    : "text-foreground hover:bg-secondary/5 border-l-2 border-transparent"
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all ${
+                  activeTab === tab.id
+                    ? "border-b-2 border-primary text-primary"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Icon className="h-5 w-5" />
-                {item.label}
+                <Icon className="h-4 w-4" />
+                {tab.label}
               </button>
             )
           })}
-        </nav>
-
-        {/* Logout button */}
-        <div className="absolute bottom-4 left-4 right-4">
-          <button
-            onClick={onLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-secondary/10 text-secondary hover:bg-secondary/20 font-sans text-sm font-medium transition-colors"
-          >
-            <LogOut className="h-4 w-4" />
-            Logout
-          </button>
         </div>
-      </motion.aside>
 
-      {/* Main content */}
-      <main className="flex-1 p-4 md:p-8 pt-16 md:pt-8 overflow-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8"
-        >
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground">
-            {activeView === "tasks" && "My Tasks"}
-            {activeView === "attendance" && "Attendance"}
-            {activeView === "stats" && "Performance Stats"}
-          </h1>
-          <p className="font-sans text-muted-foreground mt-2">
-            {activeView === "tasks" && "Current assignments and upcoming work"}
-            {activeView === "attendance" && "Check-ins and streak information"}
-            {activeView === "stats" && "Your productivity and performance metrics"}
-          </p>
-        </motion.div>
-
-        {/* Content Area */}
+        {/* Content */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          key={activeView}
+          className="grid gap-6 lg:grid-cols-3"
         >
-          {/* My Tasks View */}
-          {activeView === "tasks" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {activeTab === "tasks" && (
+            <>
               {[
-                {
-                  station: "Assembly Line B",
-                  task: "Component Assembly",
-                  time: "Until 2:30 PM",
-                  progress: 75,
-                },
-                {
-                  station: "Quality Check Zone",
-                  task: "Product Inspection",
-                  time: "Until 4:00 PM",
-                  progress: 45,
-                },
-              ].map((card, idx) => (
+                { title: "Assembly Line Setup", status: "in-progress", priority: "high" },
+                { title: "Quality Inspection", status: "pending", priority: "medium" },
+                { title: "Packaging", status: "completed", priority: "low" },
+              ].map((task, idx) => (
                 <motion.div
                   key={idx}
                   variants={itemVariants}
-                  className="p-6 rounded-xl bg-white border border-border/50 hover:border-primary/30 transition-colors"
+                  className="rounded-lg border border-border bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="font-heading font-semibold text-foreground">{card.station}</h3>
-                      <p className="font-sans text-sm text-muted-foreground">{card.task}</p>
-                    </div>
-                    <span className="font-mono text-xs text-accent bg-accent/10 px-3 py-1 rounded-full">
-                      {card.time}
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="font-heading font-semibold text-foreground">{task.title}</h3>
+                    <span
+                      className={`rounded-full px-2 py-1 text-xs font-medium ${
+                        task.status === "completed"
+                          ? "bg-green-100 text-green-700"
+                          : task.status === "in-progress"
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-gray-100 text-gray-700"
+                      }`}
+                    >
+                      {task.status}
                     </span>
                   </div>
-                  <div className="w-full bg-secondary/20 rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      className="h-full bg-primary rounded-full"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${card.progress}%` }}
-                      transition={{ delay: 0.3, duration: 0.8 }}
+                  <div className="mb-4 h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                    <div
+                      className={`h-full transition-all ${
+                        task.status === "completed"
+                          ? "w-full bg-green-500"
+                          : task.status === "in-progress"
+                          ? "w-2/3 bg-blue-500"
+                          : "w-0 bg-gray-500"
+                      }`}
                     />
                   </div>
-                  <p className="font-sans text-xs text-muted-foreground mt-2">{card.progress}% Complete</p>
+                  <p className="text-xs text-muted-foreground">Priority: {task.priority}</p>
                 </motion.div>
               ))}
-            </div>
+            </>
           )}
 
-          {/* Attendance View */}
-          {activeView === "attendance" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Check-in Summary */}
-              <motion.div
-                variants={itemVariants}
-                className="p-6 rounded-xl bg-white border border-border/50"
-              >
-                <h3 className="font-heading font-semibold text-foreground mb-4">Today's Check-In</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center pb-3 border-b border-border/30">
-                    <span className="font-sans text-sm text-muted-foreground">Check-in Time</span>
-                    <span className="font-mono font-semibold text-foreground">08:05 AM</span>
-                  </div>
-                  <div className="flex justify-between items-center pb-3 border-b border-border/30">
-                    <span className="font-sans text-sm text-muted-foreground">Status</span>
-                    <span className="font-sans text-sm font-semibold text-primary">On-Site</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-sans text-sm text-muted-foreground">Hours Logged</span>
-                    <span className="font-mono font-semibold text-foreground">6.5h</span>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Streak Info */}
-              <motion.div
-                variants={itemVariants}
-                className="p-6 rounded-xl bg-primary/5 border border-primary/20"
-              >
-                <h3 className="font-heading font-semibold text-foreground mb-4">Attendance Streak</h3>
-                <div className="text-center">
-                  <div className="text-5xl font-bold text-primary mb-2">23</div>
-                  <p className="font-sans text-sm text-muted-foreground">Consecutive days present</p>
-                  <div className="mt-4 inline-block px-3 py-1 rounded-full bg-accent/10 text-accent font-sans text-xs font-semibold">
-                    Excellent Performance
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          )}
-
-          {/* Stats View */}
-          {activeView === "stats" && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {activeTab === "attendance" && (
+            <>
               {[
-                { label: "Avg. Productivity", value: "92%", color: "primary" },
-                { label: "Tasks Completed", value: "156", color: "secondary" },
-                { label: "Quality Score", value: "98.5%", color: "accent" },
+                { date: "Today", status: "present", time: "08:00 AM" },
+                { date: "Yesterday", status: "present", time: "08:15 AM" },
+                { date: "2 days ago", status: "present", time: "08:05 AM" },
+              ].map((record, idx) => (
+                <motion.div
+                  key={idx}
+                  variants={itemVariants}
+                  className="rounded-lg border border-border bg-white p-6 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-heading font-semibold text-foreground">{record.date}</p>
+                      <p className="text-sm text-muted-foreground">Check-in: {record.time}</p>
+                    </div>
+                    <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                      <CheckCircle2 className="h-5 w-5 text-green-600" />
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </>
+          )}
+
+          {activeTab === "stats" && (
+            <>
+              {[
+                { label: "Tasks Completed", value: "24", change: "+2 this week" },
+                { label: "Attendance Rate", value: "98%", change: "Perfect record" },
+                { label: "Performance Score", value: "92/100", change: "+5 points" },
               ].map((stat, idx) => (
                 <motion.div
                   key={idx}
                   variants={itemVariants}
-                  className="p-6 rounded-xl bg-white border border-border/50 text-center"
+                  className="rounded-lg border border-border bg-gradient-to-br from-white to-white/50 p-6 shadow-sm"
                 >
-                  <p className="font-sans text-sm text-muted-foreground mb-3">{stat.label}</p>
-                  <p className={`font-heading text-4xl font-bold text-${stat.color}`}>{stat.value}</p>
+                  <p className="text-sm text-muted-foreground mb-2">{stat.label}</p>
+                  <p className="font-heading text-3xl font-bold text-foreground mb-2">{stat.value}</p>
+                  <p className="text-xs text-green-600 font-medium">{stat.change}</p>
                 </motion.div>
               ))}
-            </div>
+            </>
           )}
         </motion.div>
       </main>
-
-      {/* Mobile overlay close */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 z-20 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
     </motion.div>
   )
 }

@@ -33,67 +33,54 @@ export function CommandCenter({ onLogout }: CommandCenterProps) {
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex items-center justify-between border-b border-border/50 px-8 py-5 bg-white">
+        <header className="sticky top-0 z-20 flex items-center justify-between border-b border-border/50 px-6 sm:px-8 py-4 bg-white/50 backdrop-blur-md">
           <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-3">
-              <h1 className="text-xl font-heading font-semibold text-foreground tracking-tight">
-                Welcome back, <span className="text-primary">Commander</span>.
-              </h1>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Terminal className="h-3 w-3" />
-              <span className="font-mono">ALLOC8 v4.2.0</span>
-              <ChevronRight className="h-3 w-3" />
-              <span className="font-mono">
-                {activeView === "dashboard" && "Dashboard"}
-                {activeView === "live-map" && "Live Map"}
-                {activeView === "reports" && "Efficiency Reports"}
-                {activeView === "employees" && "Employee List"}
-              </span>
-            </div>
+            <h1 className="text-lg sm:text-xl font-heading font-semibold text-foreground">
+              Admin Dashboard
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              {activeView === "dashboard" && "System Overview"}
+              {activeView === "live-map" && "Real-time Floor Map"}
+              {activeView === "reports" && "Efficiency Reports"}
+              {activeView === "employees" && "Employee Directory"}
+            </p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Badge
               variant="outline"
               className="border-accent/30 bg-accent/10 text-accent font-mono text-[10px]"
             >
               <div className="mr-1.5 h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-              ALL SYSTEMS NOMINAL
+              ONLINE
             </Badge>
-            <div className="relative">
-              <button
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/50 text-muted-foreground transition-colors hover:text-foreground hover:border-primary/30"
-                aria-label="Notifications"
-              >
-                <Bell className="h-4 w-4" />
-              </button>
-              <div className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-accent" />
-            </div>
             <button
               onClick={onLogout}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/50 text-muted-foreground transition-colors hover:text-foreground hover:border-secondary/30"
-              aria-label="Logout"
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground transition-all hover:bg-white/10 active:scale-95"
             >
               <LogOut className="h-4 w-4" />
+              <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
         </header>
 
-        {/* Bento Grid Content */}
-        <main className="flex-1 overflow-auto p-6">
+        {/* Main Content */}
+        <main className="flex-1 overflow-auto p-6 sm:p-8">
           {activeView === "dashboard" && (
-            <div className="grid h-full auto-rows-fr grid-cols-1 gap-4 lg:grid-cols-3 lg:grid-rows-2">
-              {/* Card 1 - System Metrics (Large) */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-max"
+            >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="lg:col-span-2 lg:row-span-2"
+                className="lg:col-span-2"
               >
                 <SystemMetricsCard />
               </motion.div>
 
-              {/* Card 2 - AI Insight */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -102,22 +89,22 @@ export function CommandCenter({ onLogout }: CommandCenterProps) {
                 <AiInsightCard />
               </motion.div>
 
-              {/* Card 3 - Workforce Grid */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
+                className="lg:col-span-3"
               >
                 <WorkforceGridCard />
               </motion.div>
-            </div>
+            </motion.div>
           )}
 
           {activeView === "live-map" && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.4 }}
             >
               <NexusMapCard />
             </motion.div>
@@ -127,8 +114,8 @@ export function CommandCenter({ onLogout }: CommandCenterProps) {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              transition={{ duration: 0.4 }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
               <AiInsightCard />
               <SystemMetricsCard />
@@ -139,22 +126,12 @@ export function CommandCenter({ onLogout }: CommandCenterProps) {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.4 }}
             >
               <WorkforceGridCard />
             </motion.div>
           )}
         </main>
-
-        {/* Footer */}
-        <footer className="flex items-center justify-between border-t border-border/50 px-8 py-3 bg-white">
-          <span className="font-mono text-[10px] text-muted-foreground">
-            ALLOC8 // Smart Factory Orchestration
-          </span>
-          <span className="font-mono text-[10px] text-muted-foreground">
-            Node: US-EAST-1 // Latency: 12ms
-          </span>
-        </footer>
       </div>
     </motion.div>
   )

@@ -1,320 +1,145 @@
 "use client"
 
-import React from "react"
-
-import { useState, useEffect, useCallback } from "react"
-import { Zap } from "lucide-react"
-
-const TITLE_LETTERS = [
-  { char: "A", accent: false },
-  { char: "L", accent: false },
-  { char: "L", accent: false },
-  { char: "O", accent: false },
-  { char: "C", accent: false },
-  { char: "8", accent: true },
-  { char: "O", accent: true },
-  { char: "R", accent: false },
-]
-
-interface Sparkle {
-  id: number
-  x: number
-  y: number
-  size: number
-  delay: number
-  type: "star" | "diamond" | "dot"
-}
-
-function SparkleParticle({ sparkle }: { sparkle: Sparkle }) {
-  const shapes: Record<string, React.ReactNode> = {
-    star: (
-      <svg width={sparkle.size} height={sparkle.size} viewBox="0 0 24 24" fill="none">
-        <path
-          d="M12 0L14.59 8.41L23 12L14.59 15.59L12 24L9.41 15.59L1 12L9.41 8.41L12 0Z"
-          fill="hsl(190 95% 70%)"
-        />
-      </svg>
-    ),
-    diamond: (
-      <svg width={sparkle.size * 0.8} height={sparkle.size * 0.8} viewBox="0 0 16 16" fill="none">
-        <rect
-          x="8" y="0" width="8" height="8"
-          transform="rotate(45 8 8)"
-          fill="hsl(270 70% 70%)"
-        />
-      </svg>
-    ),
-    dot: (
-      <div
-        className="rounded-full"
-        style={{
-          width: sparkle.size * 0.4,
-          height: sparkle.size * 0.4,
-          background: "hsl(190 95% 80%)",
-          boxShadow: "0 0 6px hsl(190 95% 53%)",
-        }}
-      />
-    ),
-  }
-
-  return (
-    <div
-      className="absolute pointer-events-none animate-sparkle-float"
-      style={{
-        left: `${sparkle.x}%`,
-        top: `${sparkle.y}%`,
-        animationDelay: `${sparkle.delay}s`,
-        animationDuration: `${1.5 + Math.random() * 1.5}s`,
-      }}
-    >
-      {shapes[sparkle.type]}
-    </div>
-  )
-}
-
-function TypewriterText({ text, delay = 60 }: { text: string; delay?: number }) {
-  const [displayed, setDisplayed] = useState("")
-  const [done, setDone] = useState(false)
-
-  useEffect(() => {
-    let i = 0
-    const interval = setInterval(() => {
-      if (i < text.length) {
-        setDisplayed(text.slice(0, i + 1))
-        i++
-      } else {
-        setDone(true)
-        clearInterval(interval)
-      }
-    }, delay)
-    return () => clearInterval(interval)
-  }, [text, delay])
-
-  return (
-    <span>
-      {displayed}
-      {!done && <span className="animate-blink text-primary">|</span>}
-    </span>
-  )
-}
-
-function ScanLine() {
-  return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden z-20">
-      <div className="animate-scan-line absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-    </div>
-  )
-}
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 
 interface LandingLayerProps {
   onInitialize: () => void
 }
 
 export function LandingLayer({ onInitialize }: LandingLayerProps) {
-  const [showSubtitle, setShowSubtitle] = useState(false)
-  const [showButton, setShowButton] = useState(false)
   const [isExiting, setIsExiting] = useState(false)
-  const [lettersRevealed, setLettersRevealed] = useState(0)
-  const [sparkles, setSparkles] = useState<Sparkle[]>([])
-  const [allLettersDone, setAllLettersDone] = useState(false)
-
-  // Generate sparkles around the title once letters are revealed
-  const generateSparkles = useCallback(() => {
-    const types: Sparkle["type"][] = ["star", "diamond", "dot"]
-    const newSparkles: Sparkle[] = Array.from({ length: 14 }, (_, i) => ({
-      id: Date.now() + i,
-      x: 15 + Math.random() * 70,
-      y: 20 + Math.random() * 30,
-      size: 8 + Math.random() * 14,
-      delay: Math.random() * 2,
-      type: types[Math.floor(Math.random() * types.length)],
-    }))
-    setSparkles(newSparkles)
-  }, [])
-
-  useEffect(() => {
-    const letterTimers = TITLE_LETTERS.map((_, i) =>
-      setTimeout(() => {
-        setLettersRevealed(i + 1)
-        if (i === TITLE_LETTERS.length - 1) {
-          setAllLettersDone(true)
-        }
-      }, 400 + i * 150)
-    )
-    const subtitleTimer = setTimeout(
-      () => setShowSubtitle(true),
-      400 + TITLE_LETTERS.length * 150 + 500
-    )
-    const buttonTimer = setTimeout(
-      () => setShowButton(true),
-      400 + TITLE_LETTERS.length * 150 + 1600
-    )
-    return () => {
-      letterTimers.forEach(clearTimeout)
-      clearTimeout(subtitleTimer)
-      clearTimeout(buttonTimer)
-    }
-  }, [])
-
-  // Continuously generate sparkles after reveal
-  useEffect(() => {
-    if (!allLettersDone) return
-    generateSparkles()
-    const interval = setInterval(generateSparkles, 3000)
-    return () => clearInterval(interval)
-  }, [allLettersDone, generateSparkles])
 
   const handleInitialize = () => {
     setIsExiting(true)
-    setTimeout(onInitialize, 600)
+    setTimeout(onInitialize, 500)
+  }
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.3,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
   }
 
   return (
-    <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden transition-opacity duration-500 ${isExiting ? "animate-fade-out" : ""}`}
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className={`fixed inset-0 z-50 overflow-hidden ${isExiting ? "" : ""}`}
     >
-      {/* Video Background - adjusted for light overlay */}
+      {/* Video Background */}
       <video
         autoPlay
         muted
         loop
         playsInline
-        className="absolute inset-0 z-0 h-full w-full object-cover"
-        style={{ filter: "brightness(0.9) saturate(0.85)" }}
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ filter: "brightness(0.85) saturate(0.8)" }}
         src="/images/user-ai-generation-lql16vybirwo-1080p.mp4"
       />
 
-      {/* Heavy Misty Overlay - Clean Industrial Light Mode */}
-      <div
-        className="absolute inset-0 z-[2]"
-        style={{ background: "#F4F7FA" }}
-        style={{ opacity: 0.8 }}
-      />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/80 to-background/85" />
 
-      <ScanLine />
-
-      {/* Grid overlay - subtle */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[5] opacity-[0.02]"
-        style={{
-          backgroundImage:
-            "linear-gradient(hsl(190 95% 53%) 1px, transparent 1px), linear-gradient(90deg, hsl(190 95% 53%) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
-      {/* Center Stage */}
-      <div
-        className="relative z-30 flex flex-col items-center gap-6"
-        style={{ perspective: "1000px" }}
+      {/* Content */}
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6 lg:px-8"
       >
-        {/* Top label */}
-        <div
-          className="flex items-center gap-4 opacity-0 animate-fade-in"
-          style={{ animationDelay: "0.15s" }}
-        >
-          <div className="h-px w-20 bg-gradient-to-r from-transparent to-primary/40" />
-          <span className="font-heading text-[10px] tracking-[0.6em] uppercase text-primary/60">
-            workforce orchestration
-          </span>
-          <div className="h-px w-20 bg-gradient-to-l from-transparent to-primary/40" />
-        </div>
-
-        {/* Sparkle Layer */}
-        <div className="absolute inset-0 z-40 pointer-events-none">
-          {sparkles.map((s) => (
-            <SparkleParticle key={s.id} sparkle={s} />
-          ))}
-        </div>
-
-        {/* Title: ALLOC8OR - Stroke + Spark + Quirky Bounce */}
-        <div className="relative animate-title-glow">
-          <h1
-            className="flex items-baseline font-display select-none"
-            role="heading"
-            aria-level={1}
-            aria-label="ALLOC8OR"
-          >
-            {TITLE_LETTERS.map((letter, i) => {
-              const isAccent = letter.accent
-              return (
-                <span
-                  key={i}
-                  className={`inline-block transition-all duration-300 ${
-                    i < lettersRevealed ? "animate-letter-drop" : "opacity-0"
-                  } ${isAccent ? "animate-neon-stroke" : ""}`}
-                  style={{
-                    animationDelay:
-                      i < lettersRevealed ? `${i * 0.15}s` : "0s",
-                    fontSize: "clamp(3.5rem, 10vw, 9rem)",
-                    fontWeight: 700,
-                    letterSpacing: "0.06em",
-                    marginRight: i === 4 ? "0.04em" : "0.01em",
-                    WebkitTextStroke: isAccent
-                      ? "2px rgb(58, 110, 165)"
-                      : "1.5px rgb(175, 198, 220, 0.5)",
-                    color: isAccent ? "transparent" : "transparent",
-                    textShadow: isAccent
-                      ? "0 0 30px rgb(58, 110, 165, 0.4), 0 0 60px rgb(232, 184, 109, 0.2)"
-                      : "0 0 15px rgb(30, 41, 51, 0.08)",
-                    paintOrder: "stroke fill",
-                  }}
-                >
-                  {letter.char}
-                </span>
-              )
-            })}
-          </h1>
-
-          {/* Underline shimmer */}
-          <div className="relative mt-2 h-[2px] w-full overflow-hidden rounded-full">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
-            <div
-              className="absolute inset-0 w-1/4 bg-gradient-to-r from-transparent via-primary/50 to-transparent"
-              style={{ animation: "shimmer-line 2.5s ease-in-out infinite" }}
-            />
-          </div>
-        </div>
-
-        {/* Subtitle Badge */}
-        {showSubtitle && (
-          <div className="animate-fade-in flex items-center gap-3 rounded-full border border-secondary/30 bg-white/50 px-7 py-2.5 backdrop-blur-xl shadow-sm">
-            <Zap className="h-3.5 w-3.5 text-primary" />
-            <span className="font-heading text-xs sm:text-sm tracking-[0.35em] text-primary/70">
-              <TypewriterText
-                text="SMART FACTORY ORCHESTRATION"
-                delay={45}
-              />
+        {/* Badge */}
+        <motion.div variants={itemVariants} className="mb-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/5 px-4 py-2 backdrop-blur-md">
+            <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+            <span className="text-xs font-medium tracking-wider text-primary/70">
+              Enterprise Workforce Allocation
             </span>
           </div>
-        )}
+        </motion.div>
 
-        {/* Initialize Button */}
-        {showButton && (
-          <button
-            onClick={handleInitialize}
-            className="animate-float-up group relative mt-6 flex items-center gap-3 overflow-hidden rounded-full border-2 border-primary bg-primary px-12 py-4 font-heading text-xs sm:text-sm tracking-[0.3em] text-white backdrop-blur-md transition-all duration-500 hover:border-primary/80 hover:bg-primary/90 hover:tracking-[0.45em] hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 active:scale-95 shadow-lg hover:shadow-xl"
+        {/* Main Title with Cache Effect */}
+        <motion.div variants={itemVariants} className="mb-8 max-w-4xl text-center">
+          <div className="relative">
+            {/* Cache effect - gradient shimmer */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary/40 via-accent/20 to-primary/40 blur-2xl opacity-60 animate-pulse" />
+            
+            {/* Title with layered effect */}
+            <div className="relative">
+              <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-tight">
+                Smart Factory
+              </h1>
+              <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-accent">
+                  Orchestration
+                </span>
+              </h1>
+            </div>
+
+            {/* Accent line */}
+            <div className="mt-6 flex justify-center">
+              <div className="h-1 w-24 bg-gradient-to-r from-transparent via-accent to-transparent" />
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Subtitle */}
+        <motion.p
+          variants={itemVariants}
+          className="mb-12 max-w-2xl text-center text-lg sm:text-xl text-muted-foreground leading-relaxed"
+        >
+          AI-powered workforce allocation for smart factories. Real-time scheduling, predictive analytics, and autonomous resource orchestration.
+        </motion.p>
+
+        {/* CTA Button */}
+        <motion.button
+          variants={itemVariants}
+          onClick={handleInitialize}
+          className="group relative inline-flex items-center gap-2 rounded-full bg-primary px-8 sm:px-10 py-4 font-heading font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        >
+          <span>Get Started</span>
+          <svg
+            className="h-5 w-5 transition-transform group-hover:translate-x-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
-            <span>START</span>
-            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          </button>
-        )}
-      </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13 7l5 5m0 0l-5 5m5-5H6"
+            />
+          </svg>
+        </motion.button>
 
-      {/* Bottom bar */}
-      <div className="absolute bottom-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-5 sm:px-10 bg-white/30 backdrop-blur-sm">
-        <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-muted-foreground/60">
-          v4.2.0
-        </span>
-        <div className="flex items-center gap-2">
-          <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-          <span className="font-mono text-[10px] tracking-wider text-muted-foreground/70">
-            System Status:{" "}
-            <span className="text-accent/80 font-semibold">Online</span>
-          </span>
-        </div>
-      </div>
-    </div>
+        {/* Bottom Info */}
+        <motion.div
+          variants={itemVariants}
+          className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-4 sm:flex-row sm:justify-between px-6 sm:px-10"
+        >
+          <span className="font-mono text-xs text-muted-foreground/50">ALLOC8 v4.2.0</span>
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+            <span className="font-mono text-xs text-muted-foreground/50">System Online</span>
+          </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   )
 }
