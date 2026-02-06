@@ -71,7 +71,7 @@ const config: Config = {
         sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'monospace'],
         heading: ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-asimovian)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-michroma)', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {
