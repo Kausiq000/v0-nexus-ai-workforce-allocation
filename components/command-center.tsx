@@ -25,7 +25,7 @@ export function CommandCenter() {
         <header className="flex items-center justify-between border-b border-border/50 px-8 py-5">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-3">
-              <h1 className="text-xl font-semibold text-foreground tracking-tight">
+              <h1 className="text-xl font-heading font-semibold text-foreground tracking-tight">
                 Welcome back, <span className="text-primary neon-cyan">Commander</span>.
               </h1>
             </div>
