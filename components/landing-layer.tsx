@@ -173,32 +173,22 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
     <div
       className={`fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden transition-opacity duration-500 ${isExiting ? "animate-fade-out" : ""}`}
     >
-      {/* Video Background - slightly brighter */}
+      {/* Video Background - adjusted for light overlay */}
       <video
         autoPlay
         muted
         loop
         playsInline
         className="absolute inset-0 z-0 h-full w-full object-cover"
-        style={{ filter: "brightness(1.15) saturate(1.1)" }}
+        style={{ filter: "brightness(0.9) saturate(0.85)" }}
         src="/images/user-ai-generation-lql16vybirwo-1080p.mp4"
       />
 
-      {/* Overlay layers - more transparent to let video through */}
+      {/* Heavy Misty Overlay - Clean Industrial Light Mode */}
       <div
         className="absolute inset-0 z-[2]"
-        style={{ background: "hsl(222 59% 3% / 0.40)" }}
-      />
-      <div className="absolute inset-0 z-[3] bg-gradient-to-b from-black/35 via-transparent to-black/60" />
-      {/* Side vignettes */}
-      <div className="absolute inset-0 z-[4] bg-gradient-to-r from-black/25 via-transparent to-black/25" />
-      {/* Radial vignette */}
-      <div
-        className="absolute inset-0 z-[4]"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 50%, hsl(222 59% 3% / 0.5) 100%)",
-        }}
+        style={{ background: "#F4F7FA" }}
+        style={{ opacity: 0.8 }}
       />
 
       <ScanLine />
