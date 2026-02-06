@@ -70,6 +70,7 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-geist-sans)'],
         mono: ['var(--font-geist-mono)'],
+        display: ['var(--font-orbitron)', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {

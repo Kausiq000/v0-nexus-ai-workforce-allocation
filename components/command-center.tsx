@@ -31,7 +31,7 @@ export function CommandCenter() {
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Terminal className="h-3 w-3" />
-              <span className="font-mono">ALLOC8 v4.2.0</span>
+              <span className="font-mono">ALLOC8OR v4.2.0</span>
               <ChevronRight className="h-3 w-3" />
               <span className="font-mono">
                 {activeView === "nexus-map" && "Nexus Map"}
@@ -84,7 +84,7 @@ export function CommandCenter() {
         {/* Footer */}
         <footer className="flex items-center justify-between border-t border-border/50 px-8 py-3">
           <span className="font-mono text-[10px] text-muted-foreground">
-            ALLOC8:AUTOMATE // Smart Factory Orchestration Engine
+            ALLOC8OR // Smart Factory Orchestration Engine
           </span>
           <span className="font-mono text-[10px] text-muted-foreground">
             Node: US-EAST-1 // Latency: 12ms
