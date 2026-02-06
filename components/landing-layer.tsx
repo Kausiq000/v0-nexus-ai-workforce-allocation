@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 
 interface LandingLayerProps {
@@ -20,14 +20,14 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.3,
+        staggerChildren: 0.12,
+        delayChildren: 0.2,
       },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
@@ -40,21 +40,21 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed inset-0 z-50 overflow-hidden ${isExiting ? "" : ""}`}
+      className="fixed inset-0 z-50 overflow-hidden"
     >
-      {/* Video Background */}
+      {/* Video Background - Bright & Visible */}
       <video
         autoPlay
         muted
         loop
         playsInline
         className="absolute inset-0 h-full w-full object-cover"
-        style={{ filter: "brightness(0.85) saturate(0.8)" }}
+        style={{ filter: "brightness(1.05) saturate(1)" }}
         src="/images/user-ai-generation-lql16vybirwo-1080p.mp4"
       />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/80 to-background/85" />
+      {/* Light Overlay - 35% opacity for video visibility */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/30 to-black/35" />
 
       {/* Content */}
       <motion.div
@@ -64,44 +64,71 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
         className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6 lg:px-8"
       >
         {/* Badge */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/5 px-4 py-2 backdrop-blur-md">
-            <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-            <span className="text-xs font-medium tracking-wider text-primary/70">
-              Enterprise Workforce Allocation
+        <motion.div variants={itemVariants} className="mb-6 sm:mb-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-black/30 px-4 py-2 backdrop-blur-md">
+            <div className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="text-xs font-medium tracking-wider text-cyan-300">
+              Smart Factory Orchestration
             </span>
           </div>
         </motion.div>
 
-        {/* Main Title with Cache Effect */}
-        <motion.div variants={itemVariants} className="mb-8 max-w-4xl text-center">
+        {/* Main Title - ALLOC8OR with Cyberpunk Neon Glow */}
+        <motion.div variants={itemVariants} className="mb-6 sm:mb-10 text-center">
           <div className="relative">
-            {/* Cache effect - gradient shimmer */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary/40 via-accent/20 to-primary/40 blur-2xl opacity-60 animate-pulse" />
-            
-            {/* Title with layered effect */}
-            <div className="relative">
-              <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-tight">
-                Smart Factory
-              </h1>
-              <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-accent">
-                  Orchestration
-                </span>
-              </h1>
+            {/* Neon Glow Background Effect */}
+            <div className="absolute -inset-6 sm:-inset-8 blur-3xl opacity-60">
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/50 via-blue-500/50 to-cyan-500/50 animate-pulse" />
             </div>
 
-            {/* Accent line */}
-            <div className="mt-6 flex justify-center">
-              <div className="h-1 w-24 bg-gradient-to-r from-transparent via-accent to-transparent" />
-            </div>
+            {/* Title with Cyberpunk Neon Text Shadow */}
+            <h1
+              className="font-display text-6xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-none relative"
+              style={{
+                color: "#FFFFFF",
+                textShadow: `
+                  0 0 8px rgba(34, 211, 238, 0.8),
+                  0 0 16px rgba(34, 211, 238, 0.6),
+                  0 0 24px rgba(34, 211, 238, 0.5),
+                  0 0 32px rgba(59, 130, 246, 0.6),
+                  0 0 40px rgba(59, 130, 246, 0.4),
+                  0 0 48px rgba(139, 92, 246, 0.3),
+                  2px 2px 0 rgba(34, 211, 238, 0.4),
+                  -2px -2px 0 rgba(59, 130, 246, 0.4),
+                  4px 4px 0 rgba(34, 211, 238, 0.2)
+                `,
+                letterSpacing: "-0.03em",
+              }}
+            >
+              ALLOC8OR
+            </h1>
+
+            {/* Animated Neon Line */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.7, duration: 0.8, ease: "easeOut" }}
+              className="mt-4 sm:mt-6 mx-auto h-1 w-40 sm:w-48 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500"
+              style={{
+                originX: 0.5,
+                boxShadow: "0 0 20px rgba(34, 211, 238, 0.6), 0 0 10px rgba(59, 130, 246, 0.4)",
+              }}
+            />
           </div>
         </motion.div>
 
-        {/* Subtitle */}
+        {/* Tagline */}
         <motion.p
           variants={itemVariants}
-          className="mb-12 max-w-2xl text-center text-lg sm:text-xl text-muted-foreground leading-relaxed"
+          className="mb-8 sm:mb-10 max-w-2xl text-center text-base sm:text-lg text-cyan-100 leading-relaxed font-light tracking-wide"
+        >
+          Smart Factory Orchestration
+        </motion.p>
+
+        {/* Description */}
+        <motion.p
+          variants={itemVariants}
+          className="mb-10 sm:mb-12 max-w-2xl text-center text-xs sm:text-sm text-white/60 leading-relaxed"
         >
           AI-powered workforce allocation for smart factories. Real-time scheduling, predictive analytics, and autonomous resource orchestration.
         </motion.p>
@@ -110,11 +137,14 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
         <motion.button
           variants={itemVariants}
           onClick={handleInitialize}
-          className="group relative inline-flex items-center gap-2 rounded-full bg-primary px-8 sm:px-10 py-4 font-heading font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+          className="group relative inline-flex items-center gap-2 rounded-full bg-cyan-500 px-10 sm:px-12 py-3 sm:py-4 font-heading font-bold text-black/90 transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+          style={{
+            boxShadow: "0 0 30px rgba(34, 211, 238, 0.8), 0 0 60px rgba(34, 211, 238, 0.4), inset 0 0 20px rgba(255,255,255,0.3)",
+          }}
         >
-          <span>Get Started</span>
+          <span className="text-sm sm:text-base">Enter System</span>
           <svg
-            className="h-5 w-5 transition-transform group-hover:translate-x-1"
+            className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:translate-x-1"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -131,12 +161,12 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
         {/* Bottom Info */}
         <motion.div
           variants={itemVariants}
-          className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-4 sm:flex-row sm:justify-between px-6 sm:px-10"
+          className="absolute bottom-6 sm:bottom-8 left-0 right-0 flex flex-col items-center gap-4 sm:flex-row sm:justify-between px-4 sm:px-10"
         >
-          <span className="font-mono text-xs text-muted-foreground/50">ALLOC8 v4.2.0</span>
+          <span className="font-mono text-[10px] sm:text-xs text-cyan-300/40">ALLOC8OR v4.2.0</span>
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-            <span className="font-mono text-xs text-muted-foreground/50">System Online</span>
+            <div className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="font-mono text-[10px] sm:text-xs text-cyan-300/40">System Online</span>
           </div>
         </motion.div>
       </motion.div>
