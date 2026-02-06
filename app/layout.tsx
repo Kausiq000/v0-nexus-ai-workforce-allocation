@@ -1,20 +1,25 @@
 import React from "react"
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono, Rajdhani, Space_Grotesk } from 'next/font/google'
+import { Geist, Geist_Mono, Space_Grotesk } from 'next/font/google'
 
 import './globals.css'
 
-const _geist = Geist({ subsets: ['latin'] })
+const _geist = Geist({ subsets: ['latin'], variable: '--font-geist-sans' })
 const _geistMono = Geist_Mono({ subsets: ['latin'] })
-const _rajdhani = Rajdhani({ subsets: ['latin'], weight: ['700'], variable: '--font-rajdhani' })
-const _spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' })
+const _spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['400', '600', '700'], variable: '--font-space-grotesk' })
 export const metadata: Metadata = {
-  title: 'ALLOC8OR - Smart Factory Workforce System',
-  description: 'Next-generation AI-powered workforce allocation for smart factories. Digital twin visualization, predictive scheduling, and autonomous resource orchestration.',
+  title: 'ALLOC8: AUTOMATE - Smart Factory Orchestration',
+  description: 'Enterprise-grade workforce allocation system for smart factories. AI-powered scheduling, real-time floor maps, and autonomous resource orchestration.',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  }
 }
 
 export const viewport: Viewport = {
-  themeColor: '#22d3ee',
+  themeColor: '#3A6EA5',
+  userScalable: false,
 }
 
 export default function RootLayout({
@@ -24,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans antialiased ${_rajdhani.variable} ${_spaceGrotesk.variable}`}>{children}</body>
+      <body className={`font-sans antialiased ${_geist.variable} ${_spaceGrotesk.variable}`}>{children}</body>
     </html>
   )
 }

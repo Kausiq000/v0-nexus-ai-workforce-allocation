@@ -213,11 +213,11 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
           className="flex items-center gap-4 opacity-0 animate-fade-in"
           style={{ animationDelay: "0.15s" }}
         >
-          <div className="h-px w-20 bg-gradient-to-r from-transparent to-primary/50" />
-          <span className="font-heading text-[10px] tracking-[0.6em] uppercase text-primary/50">
-            workforce ai
+          <div className="h-px w-20 bg-gradient-to-r from-transparent to-primary/40" />
+          <span className="font-heading text-[10px] tracking-[0.6em] uppercase text-primary/60">
+            workforce orchestration
           </span>
-          <div className="h-px w-20 bg-gradient-to-l from-transparent to-primary/50" />
+          <div className="h-px w-20 bg-gradient-to-l from-transparent to-primary/40" />
         </div>
 
         {/* Sparkle Layer */}
@@ -251,12 +251,12 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
                     letterSpacing: "0.06em",
                     marginRight: i === 4 ? "0.04em" : "0.01em",
                     WebkitTextStroke: isAccent
-                      ? "2px hsl(190 95% 53%)"
-                      : "1.5px hsl(210 40% 80% / 0.7)",
+                      ? "2px rgb(58, 110, 165)"
+                      : "1.5px rgb(175, 198, 220, 0.5)",
                     color: isAccent ? "transparent" : "transparent",
                     textShadow: isAccent
-                      ? "0 0 30px hsl(190 95% 53% / 0.5), 0 0 60px hsl(270 70% 55% / 0.3)"
-                      : "0 0 15px hsl(210 40% 96% / 0.15)",
+                      ? "0 0 30px rgb(58, 110, 165, 0.4), 0 0 60px rgb(232, 184, 109, 0.2)"
+                      : "0 0 15px rgb(30, 41, 51, 0.08)",
                     paintOrder: "stroke fill",
                   }}
                 >
@@ -268,9 +268,9 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
 
           {/* Underline shimmer */}
           <div className="relative mt-2 h-[2px] w-full overflow-hidden rounded-full">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/15 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
             <div
-              className="absolute inset-0 w-1/4 bg-gradient-to-r from-transparent via-primary/70 to-transparent"
+              className="absolute inset-0 w-1/4 bg-gradient-to-r from-transparent via-primary/50 to-transparent"
               style={{ animation: "shimmer-line 2.5s ease-in-out infinite" }}
             />
           </div>
@@ -278,9 +278,9 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
 
         {/* Subtitle Badge */}
         {showSubtitle && (
-          <div className="animate-fade-in flex items-center gap-3 rounded-full border border-secondary/20 bg-secondary/5 px-7 py-2.5 backdrop-blur-xl">
-            <Zap className="h-3.5 w-3.5 text-secondary" />
-            <span className="font-heading text-xs sm:text-sm tracking-[0.35em] text-secondary/80">
+          <div className="animate-fade-in flex items-center gap-3 rounded-full border border-secondary/30 bg-white/50 px-7 py-2.5 backdrop-blur-xl shadow-sm">
+            <Zap className="h-3.5 w-3.5 text-primary" />
+            <span className="font-heading text-xs sm:text-sm tracking-[0.35em] text-primary/70">
               <TypewriterText
                 text="SMART FACTORY ORCHESTRATION"
                 delay={45}
@@ -293,25 +293,25 @@ export function LandingLayer({ onInitialize }: LandingLayerProps) {
         {showButton && (
           <button
             onClick={handleInitialize}
-            className="animate-float-up animate-pulse-neon group relative mt-6 flex items-center gap-3 overflow-hidden rounded-xl border border-primary/20 bg-primary/5 px-12 py-4 font-heading text-xs sm:text-sm tracking-[0.3em] text-primary backdrop-blur-md transition-all duration-500 hover:bg-primary/15 hover:border-primary/50 hover:tracking-[0.45em] hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-95"
+            className="animate-float-up group relative mt-6 flex items-center gap-3 overflow-hidden rounded-full border-2 border-primary bg-primary px-12 py-4 font-heading text-xs sm:text-sm tracking-[0.3em] text-white backdrop-blur-md transition-all duration-500 hover:border-primary/80 hover:bg-primary/90 hover:tracking-[0.45em] hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 active:scale-95 shadow-lg hover:shadow-xl"
           >
-            <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-            <span>INITIALIZE SYSTEM</span>
-            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
+            <span>START</span>
+            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           </button>
         )}
       </div>
 
       {/* Bottom bar */}
-      <div className="absolute bottom-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-5 sm:px-10">
-        <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-muted-foreground/30">
+      <div className="absolute bottom-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-5 sm:px-10 bg-white/30 backdrop-blur-sm">
+        <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-muted-foreground/60">
           v4.2.0
         </span>
         <div className="flex items-center gap-2">
-          <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-mono text-[10px] tracking-wider text-muted-foreground/40">
+          <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
+          <span className="font-mono text-[10px] tracking-wider text-muted-foreground/70">
             System Status:{" "}
-            <span className="text-emerald-400/70">Online</span>
+            <span className="text-accent/80 font-semibold">Online</span>
           </span>
         </div>
       </div>

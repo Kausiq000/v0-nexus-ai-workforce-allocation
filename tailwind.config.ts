@@ -68,10 +68,9 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['var(--font-geist-sans)'],
-        mono: ['var(--font-geist-mono)'],
-        display: ['var(--font-rajdhani)', 'sans-serif'],
-        heading: ['var(--font-space-grotesk)', 'sans-serif'],
+        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-geist-mono)', 'monospace'],
+        heading: ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {
